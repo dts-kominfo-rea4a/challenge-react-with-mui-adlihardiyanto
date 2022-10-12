@@ -1,13 +1,14 @@
-import { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { Card, CardContent, Container, Grid } from '@mui/material';
+import Header from './components/Header';
+import ContactForm from './components/ContactForm';
+import Contact from './components/Contact';
 import './App.css';
-import Header from "./components/Header";
-import { Grid, Divider,  List, Paper} from "@mui/material";
-import ContactForm from "./components/ContactForm";
-import Contact from "./components/Contact";
-import { grey,indigo } from "@mui/material/colors";
 
 // Uncomment untuk memuat daftar kontak
+// import contactsJSON from './data/contacts.json';
 import contactsJSON from './data/contacts.json';
+
 const App = () => {
   // Masukkan Header dan lakukan map untuk Contact ke dalam div App
   // untuk membuat daftar kontak bisa menggunakan MUI list
@@ -15,35 +16,31 @@ const App = () => {
 
   // Masukkan contacts yang sudah didapat dalam JSON sebagai initial state
   // Buatlah handler untuk menambahkan kontak baru yang akan dikirim ke ContactForm
-  const [contacts, setContacts] = useState([contactsJSON]);
 
-  useEffect(() => {
-    setContacts(contactsJSON);
-  }, []);
+  const [contacts, setContacts] = useState(contactsJSON)
 
-  const addContact = (contact) => {
+  const formSubmitHandler = (contact) => {
     setContacts([...contacts, contact]);
   };
 
   return (
     <div className="App">
-      <Header/>
-      <Grid container spacing ={7} padding={5}>
-        <Grid item xs={12} md={6}>
-          <ContactForm handleSave={addContact}/>
+      <Header />
+      <Grid container sx={{padding:'2rem'}}>
+        <Grid item xs={6}>
+          <Container>
+            <ContactForm submitHandler={formSubmitHandler} />
+          </Container>
         </Grid>
-        <Grid item xs={12} md={6}>
-					<Paper variant="outlined" sx={{ bgcolor: grey[50] }}>
-          <List sx={{bgcolor: indigo[50]}}>
-							{contacts.map((contact, index) => (
-								<div key={index}>
-									<Contact data={contact} />
-									{index !== contacts.length - 1 && <Divider />}
-								</div>
-							))}
-						</List>
-					</Paper>
-				</Grid>
+        <Grid item xs={6}>
+        <Card sx={{ backgroundColor: "#DBF6FA" }}>
+          <CardContent>
+            {contacts.map((data, i) => (
+              <Contact key={i} data={data} />
+            ))}
+          </CardContent>
+        </Card>
+        </Grid>
       </Grid>
     </div>
   );
